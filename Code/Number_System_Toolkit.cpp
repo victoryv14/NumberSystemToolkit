@@ -46,7 +46,7 @@ int main(){
                 cout << "==============================================" << endl;
                 break;
             default :
-               cout << " Inavlid choice !\n";
+               cout << " Invalid choice !\n";
         }
     } while ( choice != '5' );
     return 0;
