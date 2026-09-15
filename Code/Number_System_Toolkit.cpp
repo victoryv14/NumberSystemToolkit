@@ -15,14 +15,44 @@ class NumberSystem
          decimal = 0;
       }
       void GetInput(){
-         cin >> value ;
+         cin >> value;
       }
       void display(){
-         cout <<"Value : " << value << endl;
-         cout <<"Base : " << base << endl;
+         cout << "Value in given Base: " << value << endl;
+         cout << "Base : " << base << endl;
       }
-      virtual  bool validate() = 0;
+      void prime_check(){
+         decimal_conversion();
+         bool prime = true;
+         if( decimal <= 1 ){
+            prime = false;
+         }
+         else{
+            for( int i = 2; i <= sqrt(decimal); i++ ){
+               if( decimal % i == 0 ){
+                  prime = false;
+                  break;
+               }
+            }
+         }
+         if( prime )
+            cout << decimal << " is a Prime number!" << endl;
+         else
+            cout << decimal << " is not a Prime number!" << endl;
+      }
+      void palindrome_check(){
+         string reversed = "";
+         for( int i = value.length() - 1; i >= 0; i-- ){
+            reversed += value[i];
+         }
+         if( value == reversed )
+            cout << value << " is a Palindrome!" << endl;
+         else
+            cout << value << " is not a Palindrome!" << endl;
+      }
+      virtual bool validate() = 0;
       virtual void convert() = 0;
+      virtual void decimal_conversion() = 0;
 };
 
 class BinarySystem : public NumberSystem
@@ -40,42 +70,11 @@ class BinarySystem : public NumberSystem
          return validation;
       }
       void convert(){
-         char converting_base;
-         cout << "=================================" << endl;
-         cout << "Convert Binary to:" << endl;
-         cout << "1. Decimal\n";
-         cout << "2. Octal\n";
-         cout << "3. Hexadecimal\n";
-         cout << "=================================" << endl;
-         cin >> converting_base;
-         switch( converting_base ){
-            case '1' : {
-               cout << "Converting to Decimal....." << endl;
-               decimal_conversion();
-               cout << "The Decimal value is : " << decimal << endl;
-               break;
-            }
-            case '2' : {
-               decimal_conversion();
-               cout << "Converting to Octal....." << endl;
-               string octal = octal_conversion();
-               cout << "The Octal value is : " << octal << endl;
-               break;
-            }
-            case '3' : {
-               cout << "Coverting to Hexadecimal....." << endl;
-               decimal_conversion();
-               string hex = hex_conversion();
-               cout << "The Hexadecimal value is : " << hex << endl;
-               break;
-            }
-            default : {
-               cout << "Invalid Choice !" << endl;
-               break;
-            }
-         }
+         cout << "Converting to Decimal....." << endl;
+         decimal_conversion();
+         display();
+         cout << "The Decimal value is : " << decimal << endl;
       }
-   private :
       void decimal_conversion(){
          decimal = 0;
          int position = 0;
@@ -84,76 +83,137 @@ class BinarySystem : public NumberSystem
             position++;
          }
       }
-      string octal_conversion(){
-         string octal = "";
-         while( decimal > 0 ){
-            int remainder = decimal % 8;
-            octal = to_string(remainder) + octal;
-            decimal /= 8;
+};
+
+class DecimalSystem : public NumberSystem
+{
+   public :
+      DecimalSystem() : NumberSystem(10){ }
+      bool validate(){
+         bool validation = true;
+         for( int i = 0; i < value.length(); i++ ){
+            if( value[i] < '0' || value[i] > '9' ){
+               validation = false;
+               break;
+            }
          }
-         return octal;
+         return validation;
       }
-      string hex_conversion(){
-         string hex = "";
-         while(decimal > 0){
-            int remainder = decimal % 16;
-            if(remainder < 10)
-               hex = to_string(remainder) + hex;
-            else
-               hex = char('A' + remainder - 10) + hex;
-            decimal /= 16;
+      void convert(){
+         cout << "Converting to Binary....." << endl;
+         decimal_conversion();
+         string binary = binary_conversion();
+         display();
+         cout << "The Binary value is : " << binary << endl;
+      }
+      void decimal_conversion(){
+         decimal = 0;
+         for( int i = 0; i < value.length(); i++ ){
+            decimal = decimal * 10 + (value[i] - '0');
          }
-         return hex;
+      }
+   private :
+      string binary_conversion(){
+         string binary = "";
+         int temp = decimal;
+         while( temp > 0 ){
+            int remainder = temp % 2;
+            binary = to_string(remainder) + binary;
+            temp /= 2;
+         }
+         return binary;
       }
 };
-int main(){
-    char choice;
+
+// ─── Separate Menu Function ───
+void displayMenu(){
     cout << "==============================================" << endl;
     cout << "           NUMBER SYSTEM TOOLKIT              " << endl;
     cout << "==============================================" << endl;
     cout << " MENU : " << endl;
     cout << "        1. BINARY\n";
-    cout << "        2. OCTAL\n";
-    cout << "        3. DECIMAL\n";
-    cout << "        4. HEXADECIMAL\n";
-    cout << "        5. EXIT\n";
+    cout << "        2. DECIMAL\n";
+    cout << "        3. EXIT\n";
     cout << "==============================================" << endl;
+}
+
+int main(){
+    char choice;
+    displayMenu();
     do{
         cout << "Enter your choice (M for MENU): ";
         cin >> choice;
-        
         switch ( choice ){
-            case '1' : 
-               cout << "1\n";
+            case '1' : {
+               BinarySystem b;
+               cout << "Enter Binary number: ";
+               b.GetInput();
+               if( b.validate() ){
+                  cout << "=================================" << endl;
+                  cout << "1. Convert to Decimal\n";
+                  cout << "2. Check Prime\n";
+                  cout << "3. Check Palindrome\n";
+                  cout << "4. Arithmetic\n";
+                  cout << "=================================" << endl;
+                  cout << "Enter choice: ";
+                  char op;
+                  cin >> op;
+                  if( op == '1' )
+                     b.convert();
+                  else if( op == '2' )
+                     b.prime_check();
+                  else if( op == '3' )
+                     b.palindrome_check();
+                  else if( op == '4' )
+                     cout << "Arithmetic coming soon!\n";
+                  else
+                     cout << "Invalid choice!\n";
+               }
+               else{
+                  cout << "Invalid Binary number!\n";
+               }
                break;
-            case '2' :
-               cout << "2\n";
+            }
+            case '2' : {
+               DecimalSystem d;
+               cout << "Enter Decimal number: ";
+               d.GetInput();
+               if( d.validate() ){
+                  cout << "=================================" << endl;
+                  cout << "1. Convert to Binary\n";
+                  cout << "2. Check Prime\n";
+                  cout << "3. Check Palindrome\n";
+                  cout << "4. Arithmetic\n";
+                  cout << "=================================" << endl;
+                  cout << "Enter choice: ";
+                  char op;
+                  cin >> op;
+                  if( op == '1' )
+                     d.convert();
+                  else if( op == '2' )
+                     d.prime_check();
+                  else if( op == '3' )
+                     d.palindrome_check();
+                  else if( op == '4' )
+                     cout << "Arithmetic coming soon!\n";
+                  else
+                     cout << "Invalid choice!\n";
+               }
+               else{
+                  cout << "Invalid Decimal number!\n";
+               }
                break;
-            case '3' : 
-               cout << "3\n";
-               break;
-            case '4' :
-               cout << "4\n";
-               break;
-            case '5' : 
+            }
+            case '3' :
                cout << "Have a nice day!\nSee you again!\n";
                break;
             case 'M' :
             case 'm' :
-                cout << "==============================================" << endl;
-                cout << "           NUMBER SYSTEM TOOLKIT              " << endl;
-                cout << "==============================================" << endl;
-                cout << " MENU : " << endl;
-                cout << "        1. BINARY\n";
-                cout << "        2. OCTAL\n";
-                cout << "        3. DECIMAL\n";
-                cout << "        4. HEXADECIMAL\n";
-                cout << "        5. EXIT\n";
-                cout << "==============================================" << endl;
-                break;
+               displayMenu();
+               break;
             default :
                cout << " Invalid choice !\n";
         }
-    } while ( choice != '5' );
+    } while ( choice != '3' );
     return 0;
 }
