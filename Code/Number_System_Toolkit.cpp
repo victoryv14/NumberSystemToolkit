@@ -153,7 +153,6 @@ int main(){
                   cout << "1. Convert to Decimal\n";
                   cout << "2. Check Prime\n";
                   cout << "3. Check Palindrome\n";
-                  cout << "4. Arithmetic\n";
                   cout << "=================================" << endl;
                   cout << "Enter choice: ";
                   char op;
@@ -164,8 +163,6 @@ int main(){
                      b.prime_check();
                   else if( op == '3' )
                      b.palindrome_check();
-                  else if( op == '4' )
-                     cout << "Arithmetic coming soon!\n";
                   else
                      cout << "Invalid choice!\n";
                }
@@ -183,7 +180,6 @@ int main(){
                   cout << "1. Convert to Binary\n";
                   cout << "2. Check Prime\n";
                   cout << "3. Check Palindrome\n";
-                  cout << "4. Arithmetic\n";
                   cout << "=================================" << endl;
                   cout << "Enter choice: ";
                   char op;
@@ -194,8 +190,6 @@ int main(){
                      d.prime_check();
                   else if( op == '3' )
                      d.palindrome_check();
-                  else if( op == '4' )
-                     cout << "Arithmetic coming soon!\n";
                   else
                      cout << "Invalid choice!\n";
                }
