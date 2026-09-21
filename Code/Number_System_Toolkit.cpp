@@ -131,16 +131,16 @@ void displayMenu(){
     cout << "           NUMBER SYSTEM TOOLKIT              " << endl;
     cout << "==============================================" << endl;
     cout << " MENU : " << endl;
-    cout << "        1. BINARY\n";
-    cout << "        2. DECIMAL\n";
+    cout << "        1. BINARY to DECIMAL\n";
+    cout << "        2. DECIMAL to BINARY\n";
     cout << "        3. EXIT\n";
     cout << "==============================================" << endl;
 }
 
 int main(){
     char choice;
-    displayMenu();
     do{
+        displayMenu();
         cout << "Enter your choice (M for MENU): ";
         cin >> choice;
         switch ( choice ){
